@@ -26,14 +26,30 @@ function App() {
           />
         </div>
         <div id="choices">
-          <button className="choice">HI</button>
-          <button className="choice">NIGGERS</button>
-          <button className="choice">Click Me</button>
-          <button className="choice">Click Me</button>
-          <button className="choice">NIGGERS</button>
-          <button className="choice">Click Me</button>
-          <button className="choice">Click Me</button>
-          <button className="choice">Click Me</button>
+          <div className="choice-div">
+            <button className="choice">HI</button>
+          </div>
+          <div className="choice-div">
+            <button className="choice">NIGGERS</button>
+          </div>
+          <div className="choice-div">
+            <button className="choice">Click Me</button>
+          </div>
+          <div className="choice-div">
+            <button className="choice">Click Me</button>
+          </div>
+          <div className="choice-div">
+            <button className="choice">NIGGERS</button>
+          </div>
+          <div className="choice-div">
+            <button className="choice">Click Me</button>
+          </div>
+          <div className="choice-div">
+            <button className="choice">Click Me</button>
+          </div>
+          <div className="choice-div">
+            <button className="choice">Click Me</button>
+          </div>
         </div>
       </div>
     </div>
