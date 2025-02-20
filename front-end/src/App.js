@@ -16,7 +16,7 @@ function App() {
         <div id="score">
           <p>Score</p>
           <Counter
-            value={100}
+            value={5}
             places={[100, 10, 1]}
             fontSize={80}
             padding={5}
