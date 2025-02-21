@@ -31,7 +31,7 @@
 
   min-height: 100%;
   height: auto;
-  width: 60%;
+  width: 50%;
 
   border-left:  1.5px solid  rgb(47, 51, 54);
   border-right: 1.5px solid  rgb(47, 51, 54); 
@@ -71,7 +71,7 @@
 
   min-height: 100%;
   height: auto;
-  width: 60%;
+  width: 50%;
 }
 
 #score{
@@ -144,7 +144,7 @@
   left: 50%;
   translate: -50% -50%;
 
-  background-image: conic-gradient(from var(--angle), #ff00aa, #ff00f2, #1100ff, #00ffea,#ff00aa);
+  background-image: conic-gradient(from var(--angle), #fbff00, hsl(305, 100%, 56%), #00c3ff,#ffee00);
 
   z-index: -1;
 
