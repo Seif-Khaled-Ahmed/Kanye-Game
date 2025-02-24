@@ -9,30 +9,53 @@ import pytesseract
 import random
 from PIL import Image
 import re
+import requests
+import json
 
 def download_all_images(driver) -> None:
     links = []
-    with open("links.txt", "r") as file:
-        for line in file.readlines():
-            links.append(line.replace("\n", ""))
+    line_number = 0
+    with open("../media/links.txt", "r") as file:
+        for file in file.readlines():
+            links.append((line_number, file.replace("\n", "")))
+            line_number += 1
     
     for i in range(len(links)):
-        if download_image(driver, links[i], f"Images/{i+1}.png") == False:
-            i -= 1
+        #https://imgur.com/a/evWz7eW
+        new_link = "https://api.imgur.com/post/v1/albums/" + links[i][1].split(".com")[1][3:]
+        download_image(new_link, links[i][0])
 
-def download_image(driver, image_url, save_path):
-    """Download an image from a URL and save it to a specified path."""
+def download_image(link: str, file_path: str) -> None:
     try:
-        driver.get(image_url)
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.6778.140 Safari/537.36",
+            "Referer": "https://imgur.com/",
+            "Accept": "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Sec-Fetch-Site": "same-site",
+            "Sec-Fetch-Mode": "no-cors",
+            "Sec-Fetch-Dest": "image",
+        }
 
-        img_link = WebDriverWait(driver, 5).until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, ".image-placeholder"))
-        )
+        params = {
+            "client_id": "546c25a59c58ad7",
+            "include": "media,adconfig,account,tags"
+        }
 
-        img_link.screenshot(save_path)
+        response = requests.get(link, params=params, headers=headers)
+
+        response = json.loads(response.text)
+
+        link = response["media"][0]["url"]
+
+        params = {"maxwidth": 760, "fidelity": "grand"}
+
+        response2 = requests.get(link, headers=headers, params=params)
+
+        with open(f"../media/{file_path}.png", "wb") as file:
+            file.write(response2.content)
     except:
-        return False
-
+        print(link)
 def get_links(file_path: str) -> list[str]:
     """Uses Selenium to retrieve all the image links"""
     chrome_options = Options()
@@ -72,7 +95,7 @@ def get_links(file_path: str) -> list[str]:
 def hide_random_word(image_path, output_path="output.png"):
     num = 1
 
-    pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+    pytesseract.pytesseract.tesseract_cmd = r'../tesseract/tesseract.exe'
 
     blacklist = {"ye", "kanyewest", "twitter", "views", "edited", "edite", "am", "pm", "oq", "qo", "about", "tweet", "privacy", "rules", "help", "emerald", "get t", "they", "than", "then", "with", "corn", "man", "the", "this", "last"}  
 
@@ -146,10 +169,12 @@ if __name__ == "__main__":
     # driver = webdriver.Chrome(options=chrome_options)
 
     # download_all_images(driver)
+    #get_links("../media/links.txt")
+
 
     # driver.quit()
     
     img_id = random.randint(0, 188)
     print(img_id)
-    hide_random_word(f"Images/{img_id}.png", output_path=f"output_{img_id}.png")
+    hide_random_word(f"../media/{img_id}.png", output_path=f"output_{img_id}.png")
 

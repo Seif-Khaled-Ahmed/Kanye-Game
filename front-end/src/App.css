@@ -93,15 +93,15 @@
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-
+  
   gap: 20px;
-
+  
   max-width: 95%;
 }
 
 .choice{
   font-family: 'twitterfont','Times New Roman';  font-size: 30px;
-
+  
   border-bottom-left-radius: 9999px;
   border-bottom-right-radius: 9999px;
   border-top-left-radius: 9999px;
@@ -109,16 +109,31 @@
   
   background-color: rgba(239, 243, 244, 0.856);
   border-color: rgba(0, 0, 0, 0);
-
+  
   padding-left: 16px;
   padding-right: 16px;
-
+  
   min-height: 32px;
-
+  
   position: relative;
   z-index: 1;
-
+  
   transition: background-color 0.3s ease,transform 0.25s ease,box-shadow 0.3s ease;
+}
+.choice:hover{
+  cursor: pointer;
+
+  background-color: rgb(239, 243, 244);
+
+  transform: scale(1.02);
+
+  box-shadow:  1px 2px 10px 5px  rgb(47, 51, 54);
+
+}
+
+.choice:active{
+  transform:scale(0.9);
+
 }
 
 .choice-div{
@@ -148,13 +163,17 @@
 
   z-index: -1;
 
-  padding: 5px;
+  padding: 2px;
   border-radius: 9999px;
 
   opacity: 0;
   
   transition: opacity 0.3s ease;
   animation: 3s spin linear infinite;
+
+
+  transition: padding 0.3s ease;
+
 }
 
 @keyframes spin{
@@ -172,19 +191,4 @@
 
 .choice-div::before{
   filter: blur(0.2rem)
-}
-
-.choice:hover{
-  cursor: pointer;
-
-  background-color: rgb(239, 243, 244);
-
-  transform: scale(1.02);
-
-  box-shadow:  1px 2px 10px 5px  rgb(47, 51, 54);
-
-}
-
-.choice:active{
-  transform:scale(0.9);
 }
