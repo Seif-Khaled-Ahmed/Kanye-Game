@@ -95,9 +95,10 @@ def get_links(file_path: str) -> list[str]:
 def hide_random_word(image_path, output_path="output.png"):
     num = 1
 
-    pytesseract.pytesseract.tesseract_cmd = r'../tesseract/tesseract.exe'
+    # pytesseract.pytesseract.tesseract_cmd = r'../tesseract/tesseract.exe'
+    pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
-    blacklist = {"ye", "kanyewest", "twitter", "views", "edited", "edite", "am", "pm", "oq", "qo", "about", "tweet", "privacy", "rules", "help", "emerald", "get t", "they", "than", "then", "with", "corn", "man", "the", "this", "last"}  
+    blacklist = {"ye", "kanyewest", "twitter", "views", "edited", "edite", "am", "pm", "oq", "qo", "about", "tweet", "privacy", "rules", "help", "emerald", "get t", "they", "than", "then", "with", "corn", "man", "the", "this", "last","what"}  
 
     image = cv2.imread(image_path)
 
@@ -123,6 +124,8 @@ def hide_random_word(image_path, output_path="output.png"):
 
     if len(valid_words) < 1:
         print("No words detected!")
+        return("No words detected!")
+
         return
     
     percentage_to_hide = 0.25
@@ -156,8 +159,13 @@ def hide_random_word(image_path, output_path="output.png"):
 
     selected_words.sort(key=lambda x: x[0])
 
-    print(f"Word hidden: {selected_words}")
+    words = dict()
 
+
+    for i in range(len(selected_words)):
+        words[str(i)] = selected_words[i][1]
+
+    return words
 if __name__ == "__main__":
     # chrome_options = Options()
     # chrome_options.add_argument("--headless=new")
@@ -174,7 +182,7 @@ if __name__ == "__main__":
 
     # driver.quit()
     
-    img_id = random.randint(0, 188)
+    img_id = random.randint(0, 190)
     print(img_id)
     hide_random_word(f"../media/{img_id}.png", output_path=f"output_{img_id}.png")
 
