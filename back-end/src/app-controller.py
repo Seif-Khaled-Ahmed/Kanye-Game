@@ -1,4 +1,4 @@
-from flask import Flask, send_file, session
+from flask import Flask, send_file, session,request
 from  imageproc import hide_random_word
 import os
 import random
@@ -36,14 +36,29 @@ def get_image():
     words = hide_random_word(f"../media/{img_id}.png", output_path=f"output/output_{img_id}.png")
     print(img_id)
     print (words)
-    fiveara = {str(session.get('id')):words}
+    fiveara = {'id':str (session.get('id')) ,'words':words}
     answers.insert_one(fiveara)
     return(send_file(f'output/output_{img_id}.png'))
 
 
-@app.route('/answers', methods=['GET']) 
-def get_answers(): 
-    answers
+@app.route('/random_answers', methods=['GET']) 
+def get_answers():
+    notrandom = answers.find_one({'id': str(session.get('id'))})['words']
+    if len(notrandom) == 1:
+        return notrandom
+    randomized ={}
+    sample  = random.sample(notrandom.keys(),len(notrandom))
+    for i in range(len(notrandom)):
+        randomized[i] = notrandom[sample[i]]
+
+    return (randomized)
+
+@app.route('/answer', methods=['GET']) 
+def get_answer():
+    data = request.get_json()
+    return({})
+
+
 
 
 if __name__ == '__main__':
