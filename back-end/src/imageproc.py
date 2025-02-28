@@ -12,7 +12,7 @@ import re
 import requests
 import json
 
-def download_all_images(driver) -> None:
+def download_all_images() -> None:
     links = []
     line_number = 0
     with open("../media/links.txt", "r") as file:
@@ -167,22 +167,19 @@ def hide_random_word(image_path, output_path="output.png"):
 
     return words
 if __name__ == "__main__":
-    # chrome_options = Options()
-    # chrome_options.add_argument("--headless=new")
-    # chrome_options.add_argument("--no-sandbox")
-    # chrome_options.add_argument("--disable-gpu")
-    # chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
-    # chrome_options.add_experimental_option('useAutomationExtension', False)
-    
-    # driver = webdriver.Chrome(options=chrome_options)
 
-    # download_all_images(driver)
-    #get_links("../media/links.txt")
+    # use this to get the links from reddit
+    # get_links("../media/links.txt")
 
 
-    # driver.quit()
-    
-    img_id = random.randint(0, 190)
-    print(img_id)
-    hide_random_word(f"../media/{img_id}.png", output_path=f"output_{img_id}.png")
+
+    # use this to download all images
+    download_all_images()
+
+
+    # use this to hide a image (hide_random_word)
+
+    # img_id = random.randint(0, 190)
+    # print(img_id)
+    # hide_random_word(f"../media/{img_id}.png", output_path=f"output_{img_id}.png")
 
