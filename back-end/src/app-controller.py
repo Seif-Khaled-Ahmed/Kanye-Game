@@ -114,10 +114,19 @@ def get_leaderboard():
     return(str(scores))
 
 
-@app.route('/name', methods=['POST'])
-def set_username():
-    return(0)
-
+@app.route('/name<name1>', methods=['POST'])
+def set_username(name1):
+    name2 = {"$set": { "name": name1 }}
+    try:
+        sid = str(session.get('id'))
+    except Exception as e:
+        return(e,"user not found", 404)
+    try:
+        leaderboard.update_one({ "id": sid },name2)
+    except Exception as e:
+        return(e,"server error", 500)
+    
+    return(str(name1))
 @app.route('/submit',methods=['DELETE'])
 def submit():
     return(0)
