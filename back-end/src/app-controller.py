@@ -1,11 +1,14 @@
 from flask import Flask, send_file, session,request
+from flask_cors import CORS
 from  imageproc import hide_random_word
 import os
 import random
 import pymongo
 import time
+from datetime import timedelta
 
 app = Flask(__name__)
+CORS(app, supports_credentials=True)
 
 mongoclient = pymongo.MongoClient("mongodb://localhost:27017/")
 mongodb = mongoclient["KANYE_GAME"]
@@ -18,6 +21,7 @@ folder_path = "../media"
 png_count = len([f for f in os.listdir(folder_path) if f.lower().endswith(".png")])
 
 
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=1)
 
 app.config['SECRET_KEY'] = 'string1'
 
@@ -38,11 +42,12 @@ def get_image():
     if (not 'id' in session):
         set_session()
     img_id = random.randint(0, png_count - 1)
+    print("image number:", img_id)
     try:
         words = hide_random_word(f"../media/{img_id}.png", output_path=f"output/{sid}_output_{img_id}.png")
+        if words == "No words detected!":get_image()
     except Exception as e:
         return(e,"internal server error", 500)
-    print("image number:", img_id)
     print(words)
     answer = {'id':str (session.get('id')), 'words':words , 'imageId' : img_id}
     answers.insert_one(answer)
@@ -104,7 +109,7 @@ def get_leaderboard():
     try:
         scores = []
         scoreall = leaderboard.find().sort("score")
-        num = min(leaderboard.count_documents({}),50)
+        num = min(leaderboard.count_documents({}),30)
         for x in range(num):
             scores.append(scoreall[x])
 
@@ -114,19 +119,21 @@ def get_leaderboard():
     return(str(scores))
 
 
-@app.route('/name<name1>', methods=['POST'])
+@app.route('/name/<name1>', methods=['POST'])
 def set_username(name1):
-    name2 = {"$set": { "name": name1 }}
+    set = {"$set": { "name": name1 }}
     try:
         sid = str(session.get('id'))
     except Exception as e:
         return(e,"user not found", 404)
     try:
-        leaderboard.update_one({ "id": sid },name2)
+        leaderboard.update_one({ "id": sid },set)
     except Exception as e:
         return(e,"server error", 500)
     
     return(str(name1))
+
+
 @app.route('/submit',methods=['DELETE'])
 def submit():
     return(0)
@@ -142,7 +149,12 @@ def delete():
         os.remove(f"output/{sid}_output_{round['imageId']}.png")
     except Exception as e:
         return (e,"could not find image",500)
+    print("deleted")
     return (str(round))
+
+@app.route('/*')
+def notfound():
+    return(404,'route not found')
 
 
 if __name__ == '__main__':

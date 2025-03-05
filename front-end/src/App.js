@@ -1,14 +1,47 @@
 import "./App.css";
-import image1 from "./images/output_35.png";
 import Counter from "./Animations/Counter/Counter.jsx";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 function App() {
+  const [imageData, setImageData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const session = async () => {
+      const response = await axios.get("http://localhost:3001/");
+    };
+    const getImage = async () => {
+      try {
+        const response = await axios.get("http://localhost:3001/image", {
+          responseType: "blob",
+          withCredentials: true,
+        });
+        const imageBlob = response.data;
+        const imageObjectUrl = URL.createObjectURL(imageBlob); // Create a URL for the blob
+        setImageData(imageObjectUrl);
+        setLoading(false); // Set loading state to false
+      } catch (err) {
+        setLoading(false); // Set loading state to false
+      }
+    };
+    // session();
+    getImage();
+  }, []);
+
+  // useEffect(()=>{
+  //   const getRandom = async () =>{
+  //     try{
+  //       const response = await axios.get("http://localhost:3001/image")
+  //     }
+  //   }
+  // })
   return (
     <div id="big-big-container">
       <div id="left-container">
         <div id="container">
           <div id="image">
-            <img src={image1} alt="Example "></img>
+            <img src={imageData} alt="Fetched from API" />
           </div>
         </div>
       </div>

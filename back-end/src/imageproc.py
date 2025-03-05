@@ -11,6 +11,7 @@ from PIL import Image
 import re
 import requests
 import json
+import os
 
 def download_all_images() -> None:
     links = []
@@ -123,10 +124,7 @@ def hide_random_word(image_path, output_path="output.png"):
 
 
     if len(valid_words) < 1:
-        print("No words detected!")
         return("No words detected!")
-
-        return
     
     percentage_to_hide = 0.25
 
@@ -155,7 +153,8 @@ def hide_random_word(image_path, output_path="output.png"):
         # Draw a white box over the word
         cv2.rectangle(image, (x, y), (x + w, y + h), (255, 255, 255), -1)
 
-    cv2.imwrite(output_path, image)
+    return ("detected")
+    #cv2.imwrite(output_path, image)
 
     selected_words.sort(key=lambda x: x[0])
 
@@ -174,10 +173,17 @@ if __name__ == "__main__":
 
 
     # use this to download all images
-    download_all_images()
+    # download_all_images()
 
 
     # use this to hide a image (hide_random_word)
+    folder_path = "../media"
+
+    png_count = len([f for f in os.listdir(folder_path) if f.lower().endswith(".png")])
+    for i in range(png_count):
+        print (i,hide_random_word(f"../media/{i}.png", output_path=f"output_{i}.png"))
+
+
 
     # img_id = random.randint(0, 190)
     # print(img_id)
